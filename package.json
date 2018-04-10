@@ -2,6 +2,8 @@
   "name": "stack",
   "version": "0.1.0",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "deploy-neatobucket": "aws cloudformation deploy --stack-name neatostack --template-file aws/neatobucket.yaml"
+  },
   "dependencies": {}
 }
