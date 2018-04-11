@@ -5,5 +5,9 @@
   "scripts": {
     "deploy-neatobucket": "aws cloudformation deploy --stack-name neatostack --template-file aws/neatobucket.yaml"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@types/node": "^9.6.4",
+    "ts-node": "^5.0.1",
+    "typescript": "^2.8.1"
+  }
 }
