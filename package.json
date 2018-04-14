@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "deploy-neatobucket": "aws cloudformation deploy --stack-name neatostack --template-file aws/neatobucket.yaml"
+    "create-stack": "yarn ts-node scripts/create-stack",
+    "update-stack": "yarn ts-node scripts/update-stack",
+    "list-buckets": "yarn ts-node scripts/list-buckets"
   },
   "dependencies": {
     "@types/node": "^9.6.4",
