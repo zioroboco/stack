@@ -1,12 +1,9 @@
 import { CloudFormation } from "aws-sdk"
 import { readFileSync } from "fs"
 
-new CloudFormation({
-  apiVersion: "2010-05-15",
-  region: "ap-southeast-2"
-})
+new CloudFormation()
   .createStack({
-    StackName: "stack",
+    StackName: process.env.STACK_NAME || "stack",
     TemplateBody: readFileSync("aws/stack.yaml").toString()
   })
   .promise()

@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "ts-node": "ts-node --require dotenv/config",
     "create-stack": "yarn ts-node scripts/create-stack",
     "update-stack": "yarn ts-node scripts/update-stack",
     "list-buckets": "yarn ts-node scripts/list-buckets"
   },
   "dependencies": {
+    "@types/dotenv": "^4.0.3",
     "@types/node": "^9.6.4",
     "aws-sdk": "^2.224.1",
+    "dotenv": "^5.0.1",
     "ts-node": "^5.0.1",
     "typescript": "^2.8.1"
   }
