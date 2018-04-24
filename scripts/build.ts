@@ -4,10 +4,9 @@ import { Template } from "cloudformation-declarations"
 interface Argument {
   template: Template
   name: string
-  op: "create" | "update"
 }
 
-const build: (arg: Argument) => void = ({ template, name, op }) => {
+const build: (arg: Argument) => void = async ({ template, name }) => {
   type Params =
     | CloudFormation.CreateStackInput
     | CloudFormation.UpdateStackInput
@@ -16,13 +15,22 @@ const build: (arg: Argument) => void = ({ template, name, op }) => {
     TemplateBody: JSON.stringify(template)
   }
 
-  const opFn = op
-    ? (cf: CloudFormation, params: Params) => cf.createStack(params)
-    : (cf: CloudFormation, params: Params) => cf.updateStack(params)
+  const cf = new CloudFormation({ apiVersion: "2010-09-09" })
+  const existingStackNames = await getExistingStackNames(cf)
+  const op = existingStackNames.find(existing => existing === name)
+    ? (cf: CloudFormation, params: Params) => cf.updateStack(params)
+    : (cf: CloudFormation, params: Params) => cf.createStack(params)
 
-  opFn(new CloudFormation(), params)
-    .promise()
-    .then(response => console.log(`Stack ${op}d with id=${response.StackId}`))
+  op(cf, params).promise()
+}
+
+const getExistingStackNames = async (cf: CloudFormation) => {
+  const { StackSummaries } = await cf.listStacks().promise()
+  if (StackSummaries) {
+    return StackSummaries.map(stack => stack.StackName)
+  } else {
+    return []
+  }
 }
 
 export { build }
