@@ -1,5 +1,6 @@
 import { CloudFormation } from "aws-sdk"
 import { AWS, Template, Resource } from "cloudformation-declarations"
+import { build } from "./build"
 
 const template: Template = {
   AWSTemplateFormatVersion: "2010-09-09",
@@ -11,10 +12,8 @@ const template: Template = {
   }
 }
 
-new CloudFormation({})
-  .createStack({
-    StackName: "declared",
-    TemplateBody: JSON.stringify(template)
-  })
-  .promise()
-  .then(response => console.log(`Stack created with id=${response.StackId}`))
+build({
+  template,
+  name: "built-stack",
+  op: "create"
+})
