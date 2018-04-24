@@ -8,6 +8,7 @@
     "list-buckets": "yarn ts-node scripts/list-buckets"
   },
   "dependencies": {
+    "@types/aws-lambda": "^8.10.1",
     "@types/dotenv": "^4.0.3",
     "@types/node": "^9.6.4",
     "@types/yargs": "^11.0.0",

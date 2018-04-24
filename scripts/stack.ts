@@ -3,7 +3,7 @@ import { readFileSync } from "fs"
 import { argv } from "yargs"
 
 const template = argv._[0]
-const createOpt = argv.create
+const optCreate = argv.create
 
 if (!template) {
   console.error("Must specify a template!")
@@ -16,7 +16,7 @@ const params: Params = {
   TemplateBody: readFileSync(template).toString()
 }
 
-const operation = createOpt
+const operation = optCreate
   ? (cf: CloudFormation, params: Params) => cf.createStack(params)
   : (cf: CloudFormation, params: Params) => cf.updateStack(params)
 
@@ -24,6 +24,6 @@ operation(new CloudFormation(), params)
   .promise()
   .then(response =>
     console.log(
-      `Stack ${createOpt ? "create" : "update"}d with id=${response.StackId}`
+      `Stack ${optCreate ? "create" : "update"}d with id=${response.StackId}`
     )
   )

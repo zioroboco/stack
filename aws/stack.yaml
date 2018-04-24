@@ -1,3 +1,25 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
 Resources:
-  bucket:
+
+  Bucket:
     Type: AWS::S3::Bucket
+
+  BucketWatcher:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs6.10
+      CodeUri: s3://lambda-stack-bucket/e20e10aa35d04cf0a7f8acd560c5535e
+      Policies: AmazonS3ReadOnlyAccess
+      Events:
+        Upload:
+          Type: S3
+          Properties:
+            Bucket: !Ref Bucket
+            Events: s3:ObjectCreated:*
+
+Outputs:
+  S3Bucket:
+    Value: !Ref Bucket
