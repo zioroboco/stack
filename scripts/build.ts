@@ -1,18 +1,22 @@
 import { CloudFormation } from "aws-sdk"
-import { Template } from "cloudformation-declarations"
 
-interface Argument {
-  template: Template
+type Stack = {
   name: string
+  template: string
+  capabilities?: string[]
 }
 
-const build: (arg: Argument) => void = async ({ template, name }) => {
+type Build = (stack: Stack) => Promise<void>
+
+const build: Build = async ({ name, template, capabilities = [] }) => {
   type Params =
     | CloudFormation.CreateStackInput
     | CloudFormation.UpdateStackInput
+
   const params: Params = {
     StackName: name,
-    TemplateBody: JSON.stringify(template)
+    TemplateBody: template,
+    Capabilities: capabilities
   }
 
   const cf = new CloudFormation({ apiVersion: "2010-09-09" })
@@ -21,7 +25,7 @@ const build: (arg: Argument) => void = async ({ template, name }) => {
     ? (cf: CloudFormation, params: Params) => cf.updateStack(params)
     : (cf: CloudFormation, params: Params) => cf.createStack(params)
 
-  op(cf, params).promise()
+  await op(cf, params).promise()
 }
 
 const getExistingStackNames = async (cf: CloudFormation) => {
